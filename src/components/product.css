@@ -1,10 +1,5 @@
-.coverImage,.cards{
-    
+.product{
     display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.cards{
-    margin-top: 10vh;
 }

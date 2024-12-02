@@ -6,3 +6,9 @@ html,
 body {
   height: 100%;
 }
+.cart{
+  
+  display: flex;
+  justify-content: left;
+  align-items: left;
+}
