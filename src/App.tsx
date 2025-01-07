@@ -12,20 +12,23 @@ import {
   Route,
 } from "react-router-dom";
 
+
 function App() {
 
+  const [cart,setCart]=useState(0)
+console.log(cart)
   return (
     <div>
       <Router>
-      <NavbarComponent />
+      <NavbarComponent cartQty={cart} />
       <Routes>
       <Route path="/" element= {<LayoutComponent />} />
       {/* <Route path="/about" element= {<LayoutComponent />} /> */}
       {/* <Route path="/contact" element= {<LayoutComponent />} /> */}
-      <Route path="/product/:productId" element= {<ProductComponent />} />
+      <Route path="/product/:productId" element= {<ProductComponent cartQty={setCart} />} />
       {/* <div className='cart'> */}
 
-      <Route path="/cart" element= {<CartComponent />} />
+      <Route path="/cart" element= {<CartComponent cartQty={setCart}  />} />
       {/* </div> */}
       
       </Routes>

@@ -9,17 +9,17 @@ console.log(item)
 localStorage.setItem("data",JSON.stringify(item))
 }
   return (
-    <div className="gap-2 grid grid-cols-1 sm:grid-cols-1">
+    <div className="gap-2 grid grid-cols-1 sm:grid-cols-3">
       {list.map((item, index) => (
         <Link key={index} href={`/product/${item.title}`}>
-        <Card style={{margin:'2vw'}} shadow="sm" key={index} isPressable onPress={() => selectedProduct(item)}>
+        <Card style={{margin:'2vw'}} shadow="md" key={index} isPressable onPress={() => selectedProduct(item)}>
           <CardBody className="overflow-visible p-0">
             <Image
               shadow="sm"
               radius="lg"
               width="100%"
               alt={item.title}
-              className="w-full object-cover h-full"
+              className=" object-cover h-[40vh]"
               src={item.img}
             />
           </CardBody>
