@@ -4,7 +4,9 @@ import axios from "axios";
 import FormComponent from "./Form";
 import { useState,useEffect } from "react";
 import ModalComponent from "./Modal";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from "../features/store";
+import { resetVariable } from "../features/variableSlice";
 interface address {
   fullName: string;
   phone: string;
@@ -15,49 +17,46 @@ interface address {
   zip: string;
   country: string;
 }
-function CartComponent(props: any){
+type Item = {
+  img:string;
+  key: number;
+  title: string;
+  price: string;
+  qty: number;
+};
+function CartComponent(){
 
-  const [modal, setModal] = useState(false)
+  const [modal, setModal] = useState(null)
+
+const CustAddress = useSelector((state: RootState) => state.variable.CustAddress);
   
-  const [childData, setChildData] = useState<address>({
-    fullName: "",
-    phone: "",
-    email:"",
-    street: "",
-    city: "",
-    state: "",
-    zip: "",
-    country: "",
-});
-
-
-
-useEffect(()=>{
-  console.log(childData.fullName)
-},[setChildData]);
-    // Callback to handle data from child
-    const handleChildData = (data: address) => {
-        setChildData(data);
-    };
+const dispatch = useDispatch();
+   
     const list = ItemList
     let updatedArray :any
     let totalPrice : any
+    let dbItemData: any
     let cartData=JSON.parse(localStorage.getItem("cartItem")!)
     console.log(cartData)
     if(cartData){
+      //Filtering items which are selected in cart
     const matchingItems = list.filter(item1 =>cartData.some((item2:any) => item1.key === item2.key))
+    //merging qty property in cart item details
     updatedArray = matchingItems.map(item => {
         const match = cartData.find((extra:any) => extra.key === item.key);
         return match ? { ...item, ...match } : item;
       });
       console.log(updatedArray)
+
+      //removing img property from item as its not required to be stored in database
+      dbItemData = updatedArray.map(({ img, ...rest }:Item) => rest);
+     
       function calculateTotalPrice(cart: any): number {
         return cart.reduce((total: number, item: { price: number; qty: number; }) => {
             return total + item.price * item.qty;
         }, 0);
     }
   totalPrice = calculateTotalPrice(updatedArray)
-  console.log(totalPrice)
     }
     function selectedProduct(_item: { key: number; title: string; img: string; price: string; }){
       localStorage.setItem("data",JSON.stringify(_item))
@@ -73,9 +72,20 @@ useEffect(()=>{
     };
 
     async function custDetails(res: any,address: address){
-      return await axios.post("http://localhost:5000/order-details", {
-        custDetails: address, // Example amount in INR
+      return await axios.post("http://localhost:5000/api/customer-data", {
+        custDetails: address,
         paymentDetails: res,
+        itemDetails:dbItemData,
+        amount:totalPrice
+    });
+    }
+
+    async function sendMail(res: any,address: address){
+      return await axios.post("http://localhost:5000/order-details", {
+        custDetails: address,
+        paymentDetails: res,
+        itemDetails:dbItemData,
+        amount:totalPrice
     });
     }
 
@@ -103,18 +113,20 @@ useEffect(()=>{
           order_id: order.id, // Razorpay Order ID
           handler: function (response: any) {
               console.log("Payment Successful", response);
-              alert("Payment Successful!");
-              // localStorage.clear()
-              console.log(response)
+              
+              custDetails(response,CustAddress)
+              sendMail(response,CustAddress)
               localStorage.removeItem("cartItem")
               localStorage.removeItem("data")
-              setModal(true)
-              custDetails(response,childData)
+              dispatch(resetVariable());
+              setModal(response.razorpay_order_id)
+              
+              
           },
           prefill: {
-              name: childData.fullName,
-              email: childData.email,
-              contact: childData.phone,
+              name: CustAddress.fullName,
+              email: CustAddress.email,
+              contact: CustAddress.phone,
           },
           theme: {
               color: "#F37254",
@@ -128,7 +140,7 @@ useEffect(()=>{
     return(
 
         <div className="justify-center flex items-center mt-10 ml-5 md:ml-0">
-          {cartData ? (
+        {modal===null?(
         <div className="gap-2 grid grid-cols-1 md:grid-cols-2">
         <div className="gap-2 grid grid-cols-1">
         {(updatedArray.map((item:any, index:any) => (
@@ -162,13 +174,10 @@ useEffect(()=>{
       <div className="mt-5 mb-5">
       {/* <Button isDisabled={buy} color="warning" className="font-medium text-l" variant="solid" onPress={() => {handlePayment()}} >Buy Now</Button> */}
       </div>
-        <FormComponent onSendData={handleChildData}
-                        buyNow={handlePayment}/>
+        <FormComponent buyNow={handlePayment}/>
       </div>
       </div>
-
-):(<div>No Item</div>)}
-{modal?(<ModalComponent text={"payment done"} modal={setModal}/>):null}
+):(<ModalComponent orderid={modal} modal={setModal} />)}
       </div>
     )
 }

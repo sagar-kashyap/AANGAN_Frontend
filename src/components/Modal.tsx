@@ -8,11 +8,12 @@ import {
     
   } from "@nextui-org/react";
   import { useNavigate } from "react-router-dom";
+  import {Snippet} from "@nextui-org/react";
   
   export default function ModalComponent(props: any) {
 
     const navigate = useNavigate();
-
+    // console.log(props.text)
     function backHome(){
       console.log("home")
       navigate("/");
@@ -25,18 +26,18 @@ import {
           <ModalContent>
             
               <>
-                <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">🎉 Purchase Confirmed!</ModalHeader>
                 <ModalBody>
                   <p>
-                   {props.text}
+                  Thank you for purchase! Your order has been successfully placed, and the details will be sent to your provided email shortly.</p>
+                   {/* <h2 style={{ color: "blue" }}>{props.orderid}.</h2> */}
+                   <Snippet symbol="" color="primary">{props.orderid}</Snippet>
+                   <p> Please keep your product code for future reference. 😊
                   </p>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="danger" variant="light">
-                    Close
-                  </Button>
-                  <Button color="primary" onPress={()=>{props.modal(false);backHome()}} >
-                    Action
+                  <Button color="primary" onPress={()=>{props.modal(null);backHome()}} >
+                    Home
                   </Button>
                 </ModalFooter>
               </>

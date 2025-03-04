@@ -2,10 +2,9 @@ import { useState,useEffect } from "react";
 import {Image, Button} from "@nextui-org/react";
 import './product.css'
 import { useDispatch } from 'react-redux';
-import { addItem } from '../features/cartSlice';
+import { setVariable, resetVariable } from "../features/variableSlice";
 
-
-export default function ProductComponent(props:any) {
+export default function ProductComponent() {
   let arr:any = [];
  var data:any
  let currentItem:any
@@ -17,11 +16,11 @@ const [button,setButton] = useState(true)
 data=JSON.parse(localStorage.getItem("data")!)
 let cartData=JSON.parse(localStorage.getItem("cartItem")!)
 
+// const cartItems = useSelector((state: RootState) => state.cart.items);
+
 useEffect(()=>{
-  
   if(count===0){
     setButton(true)
-    props.cartQty(count)
     // dispatch(addItem(JSON.parse(localStorage.getItem("cartItem")!)))
   }
 },[count])
@@ -41,7 +40,11 @@ if(currentItem.length!==0){
 }
 }
 },[]);
-
+function cartBadge(){
+  let data=JSON.parse(localStorage.getItem("cartItem")||"[]")
+  
+  dispatch(setVariable(data.length));
+}
   function incrementCount() {
     count = count + 1;
     setCount(count);
@@ -50,24 +53,31 @@ if(currentItem.length!==0){
   }
   function decrementCount() {
     count = count - 1;
+    console.log(count)
+    
     if(count==0){
       setCount(count);
       setButton(true)
+      console.log(count)
         arr=cartData.filter((e:any)=> {
           return e.key !== data.key;
         })
         localStorage.setItem("cartItem",JSON.stringify(arr))
-        props.cartQty(count)
+        cartBadge()
     }
     else if(count>0){
       setCount(count);
     }
     console.log(count)
+    
   }
-  function addToCart(addData:any){
+  
+  function addToCart1(addData:any){
     if(count>0){
     let obj:any = {
       key:addData.key,
+      title:addData.title,
+      price:addData.price,
       qty:count
     }
     let cartData2=JSON.parse(localStorage.getItem("cartItem")!)
@@ -79,19 +89,21 @@ if(currentItem.length!==0){
 
       arr.push(obj)
       console.log(obj)
-      props.cartQty(count)
+      
       // dispatch(addItem(obj));
       localStorage.setItem("cartItem",JSON.stringify(arr))
-     
+      cartBadge()
+      
     }else{
       arr.push(obj)
       console.log(obj)
-      props.cartQty(count)
+      
       // dispatch(addItem(obj));
       localStorage.setItem("cartItem",JSON.stringify(arr))
+      cartBadge()
      }
   }
-dispatch(addItem(JSON.parse(localStorage.getItem("cartItem")!)))
+ 
 }
 
   return (
@@ -116,7 +128,7 @@ dispatch(addItem(JSON.parse(localStorage.getItem("cartItem")!)))
     <div className="mb-10 md:mb-0 mt-10 grid grid-cols-1 md:grid-cols-2">
       <div>
 
-    <Button isDisabled={button} color="warning" className="font-medium text-xl" variant="solid" onPress={()=>addToCart(data)}>Add to Cart</Button>
+    <Button isDisabled={button} color="warning" className="font-medium text-xl" variant="solid" onPress={()=>addToCart1(data)}>Add to Cart</Button>
       </div>
     </div>
           </div>

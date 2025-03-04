@@ -1,35 +1,38 @@
 import {useState,useEffect} from "react";
 import {Badge, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button} from "@nextui-org/react";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from "../features/store";
+import { setNavbar } from "../features/variableSlice";
 
-export default function NavbarComponent(props:any) {
+export default function NavbarComponent() {
 
-  const cartItems = useSelector((state:any) => state.cart.items);
   const [isMenuOpen, setIsMenuOpen] =useState(false);
   const [item,setItem] = useState(true)
-  const [qty,setQty] = useState(0)
 
+ 
+ const variable = useSelector((state: RootState) => state.variable.value);
+ const navItem = useSelector((state: RootState) => state.variable.Navbar);
+ const dispatch = useDispatch()
   useEffect(()=>{
-       let cartData=JSON.parse(localStorage.getItem("cartItem")!)
-      //  console.log(cartData.length)
-       if(cartData && cartData.length>0){
-        console.log(cartData,cartData.length)
-       setItem(false)
-       setQty(cartData.length)
-       }
-       else if(cartData && cartData.length==0){
-        // console.log(cartData,cartData.length)
-         setItem(true)
-       setQty(cartData.length)
-       }
-      // console.log(cartItems)
-  },[props.cartQty]);
-  console.log(props.cartQty)
+    console.log(variable)
+    if(variable===0){
+      setItem(true)
+    }
+    else{
+      setItem(false)
+    }
+  },[variable]);
+
   const menuItems = [
-    "Home",
-    "About us",
-    "Contacts",
+    {title:"Home", href:"/"},
+    {title:"About us", href:"/about"},
+    {title:"Contacts", href:"/contact"},
+    
   ];
+
+  function buttonActivate(e: any) {
+    dispatch(setNavbar(e))
+  }
 
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen}>
@@ -40,39 +43,23 @@ export default function NavbarComponent(props:any) {
         />
         <NavbarBrand>
           {/* <AcmeLogo /> */}
-          <p className="font-bold text-inherit">Sapna Craft</p>
+          <p className="font-bold text-inherit">AANGAN</p>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="/">
-            Home
+          {menuItems.map((item,index)=>(
+            <NavbarItem key={index} isActive={item.title===navItem.title?true:false}>
+            <Link onPress={()=>buttonActivate(item)}  href={item.href} color={item.title===navItem.title ? "primary" : "foreground"}>
+            {item.title}
           </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="/about" aria-current="page">
-            About us
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="/contact">
-            Contacts
-          </Link>
-        </NavbarItem>
-        {/* <NavbarItem>
-          <Link color="foreground" href="/product">
-            Product
-          </Link>
-        </NavbarItem> */}
+        </NavbarItem >
+          ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        {/* <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
-        </NavbarItem> */}
         <NavbarItem >
           {/* <Link href="/cart"> */}
-          <Badge color="danger" content={qty}>
+          <Badge color="danger" content={variable}>
           <Button isDisabled={item} as={Link} color="danger" href="/cart" variant="solid">
             <text style={{fontWeight:'bold'}}>🛒Cart</text>
           </Button>
@@ -88,10 +75,10 @@ export default function NavbarComponent(props:any) {
                 index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
               }
               className="w-full"
-              href="#"
+              href={item.href}
               size="lg"
             >
-              {item}
+              {item.title}
             </Link>
           </NavbarMenuItem>
         ))}
