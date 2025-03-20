@@ -12,3 +12,9 @@ body {
   justify-content: left;
   align-items: left;
 }
+.footer {
+  clear: both;
+  position: relative;
+  /* height: 0px; */
+  margin-top: 1em;
+}

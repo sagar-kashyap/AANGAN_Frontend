@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Input, Textarea, Button, Spacer } from '@nextui-org/react';
+import { Input, Textarea, Button, Spacer } from "@heroui/react";
 import { useDispatch } from 'react-redux';
 import { setGlobalAddress } from "../features/variableSlice";
 interface ChildProps {
@@ -37,7 +37,8 @@ const AddressSection: React.FC<ChildProps> = ({buyNow }) =>{
 
     return (
         // <Card>
-        <div>
+        // </Card>
+        <div className='mr-[5vw] md:mr-0'>
             {/* <Text h3>Shipping Address</Text> */}
             <Input
             isRequired
@@ -46,7 +47,6 @@ const AddressSection: React.FC<ChildProps> = ({buyNow }) =>{
                 name="fullName"
                 value={address.fullName}
                 onChange={handleChange}
-                placeholder="Enter your full name"
                 type="text"
             />
             <Spacer y={1} />
@@ -57,7 +57,7 @@ const AddressSection: React.FC<ChildProps> = ({buyNow }) =>{
                 name="phone"
                 value={address.phone}
                 onChange={handleChange}
-                placeholder="Enter your phone number"
+                
                 type="number"
             />
             <Spacer y={1} />
@@ -68,7 +68,7 @@ const AddressSection: React.FC<ChildProps> = ({buyNow }) =>{
                 name="email"
                 value={address.email}
                 onChange={handleChange}
-                placeholder="Enter your email"
+                
                 type="email"
             />
             <Spacer y={1} />
@@ -79,7 +79,7 @@ const AddressSection: React.FC<ChildProps> = ({buyNow }) =>{
                 name="street"
                 value={address.street}
                 onChange={handleChange}
-                placeholder="Enter your street address"
+                
                 type="text"
             />
             <Spacer y={1} />
@@ -90,7 +90,7 @@ const AddressSection: React.FC<ChildProps> = ({buyNow }) =>{
                 name="city"
                 value={address.city}
                 onChange={handleChange}
-                placeholder="Enter your city"
+                
             />
             <Spacer y={1} />
             <Input
@@ -100,7 +100,7 @@ const AddressSection: React.FC<ChildProps> = ({buyNow }) =>{
                 name="state"
                 value={address.state}
                 onChange={handleChange}
-                placeholder="Enter your state"
+                
             />
             <Spacer y={1} />
             <Input
@@ -110,7 +110,7 @@ const AddressSection: React.FC<ChildProps> = ({buyNow }) =>{
                 name="zip"
                 value={address.zip}
                 onChange={handleChange}
-                placeholder="Enter your ZIP code"
+                
             />
             <Spacer y={1} />
             <Input
@@ -120,15 +120,12 @@ const AddressSection: React.FC<ChildProps> = ({buyNow }) =>{
                 name="country"
                 value={address.country}
                 onChange={handleChange}
-                placeholder="Enter your country"
+                
             />
             <Spacer y={6} />
-
             <Button isDisabled={!isFormValid} color="warning" className="font-medium text-l" variant="solid" onPress={callBuy}>Buy Now</Button>
             <Spacer y={6} />
-            </div>
-            
-        // </Card>
+        </div>
     );
 };
 

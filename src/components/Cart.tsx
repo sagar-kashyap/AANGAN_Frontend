@@ -1,12 +1,14 @@
-import {Card, CardBody, Image, Link, Button} from "@nextui-org/react";
-import ItemList from "../../public/Items"
+import {Card, CardBody, Image, Link, Button} from "@heroui/react";
+// import ItemList from "../../public/Items"
+import EmptyCartComponent from "./empty-cart";
 import axios from "axios";
 import FormComponent from "./Form";
 import { useState,useEffect } from "react";
 import ModalComponent from "./Modal";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "../features/store";
-import { resetVariable } from "../features/variableSlice";
+import { setVariable,resetVariable,increaseQuantity, decreaseQuantity, removeItem } from "../features/variableSlice";
+ import { useNavigate } from "react-router-dom";
 interface address {
   fullName: string;
   phone: string;
@@ -21,45 +23,33 @@ type Item = {
   img:string;
   key: number;
   title: string;
-  price: string;
+  price: number;
   qty: number;
 };
 function CartComponent(){
 
   const [modal, setModal] = useState(null)
+  const navigate = useNavigate();
 
 const CustAddress = useSelector((state: RootState) => state.variable.CustAddress);
-  
+const cartItemRedux = useSelector((state: RootState) => state.variable.items);
 const dispatch = useDispatch();
-   
-    const list = ItemList
-    let updatedArray :any
-    let totalPrice : any
-    let dbItemData: any
-    let cartData=JSON.parse(localStorage.getItem("cartItem")!)
-    console.log(cartData)
-    if(cartData){
-      //Filtering items which are selected in cart
-    const matchingItems = list.filter(item1 =>cartData.some((item2:any) => item1.key === item2.key))
-    //merging qty property in cart item details
-    updatedArray = matchingItems.map(item => {
-        const match = cartData.find((extra:any) => extra.key === item.key);
-        return match ? { ...item, ...match } : item;
-      });
-      console.log(updatedArray)
-
-      //removing img property from item as its not required to be stored in database
-      dbItemData = updatedArray.map(({ img, ...rest }:Item) => rest);
-     
-      function calculateTotalPrice(cart: any): number {
-        return cart.reduce((total: number, item: { price: number; qty: number; }) => {
-            return total + item.price * item.qty;
-        }, 0);
-    }
-  totalPrice = calculateTotalPrice(updatedArray)
-    }
+const totalPriceRedux = cartItemRedux.reduce((total, item) => total + item.price * item.qty, 0);
+    //removing img property from item as its not required to be stored in database
+    let dbItemData = cartItemRedux.map(({ img, ...rest }:Item) => rest);
+  
     function selectedProduct(_item: { key: number; title: string; img: string; price: string; }){
-      localStorage.setItem("data",JSON.stringify(_item))
+      navigate(`/product/${_item.title}`)
+      sessionStorage.setItem("data",JSON.stringify(_item))
+    }
+
+    function incrementCount(item:Item) {
+      dispatch(increaseQuantity(item.key))
+      dispatch(setVariable())
+    }
+    function decrementCount(item:Item) {
+      dispatch(decreaseQuantity(item.key))
+      dispatch(setVariable())
     }
     const loadRazorpayScript = () => {
       return new Promise((resolve) => {
@@ -72,20 +62,20 @@ const dispatch = useDispatch();
     };
 
     async function custDetails(res: any,address: address){
-      return await axios.post("http://localhost:5000/api/customer-data", {
+      return await axios.post(`${import.meta.env.VITE_SERVER_API}/api/customer-data`, {
         custDetails: address,
         paymentDetails: res,
         itemDetails:dbItemData,
-        amount:totalPrice
+        amount:totalPriceRedux
     });
     }
 
     async function sendMail(res: any,address: address){
-      return await axios.post("http://localhost:5000/order-details", {
+      return await axios.post(`${import.meta.env.VITE_SERVER_API}/order-details`, {
         custDetails: address,
         paymentDetails: res,
         itemDetails:dbItemData,
-        amount:totalPrice
+        amount:totalPriceRedux
     });
     }
 
@@ -99,8 +89,8 @@ const dispatch = useDispatch();
       }
     
       // Call the backend to create an order
-      const { data: order } = await axios.post("http://localhost:5000/create-order", {
-          amount: totalPrice, // Example amount in INR
+      const { data: order } = await axios.post(`${import.meta.env.VITE_SERVER_API}/create-order`, {
+          amount: totalPriceRedux, // Example amount in INR
           currency: "INR",
       });
    
@@ -116,12 +106,11 @@ const dispatch = useDispatch();
               
               custDetails(response,CustAddress)
               sendMail(response,CustAddress)
-              localStorage.removeItem("cartItem")
-              localStorage.removeItem("data")
+              sessionStorage.removeItem("cartItem")
+              sessionStorage.removeItem("data")
               dispatch(resetVariable());
               setModal(response.razorpay_order_id)
-              
-              
+                 
           },
           prefill: {
               name: CustAddress.fullName,
@@ -140,44 +129,78 @@ const dispatch = useDispatch();
     return(
 
         <div className="justify-center flex items-center mt-10 ml-5 md:ml-0">
+        {cartItemRedux.length!=0?(
+          <div>
         {modal===null?(
         <div className="gap-2 grid grid-cols-1 md:grid-cols-2">
         <div className="gap-2 grid grid-cols-1">
-        {(updatedArray.map((item:any, index:any) => (
-            <div className="gap-2 grid grid-cols-2 md:grid-cols-2">
-          <Link className="items-start" key={index} href={`/product/${item.title}`}>
-          <Card  style={{margin:'1vw'}} shadow="none" key={index} isPressable onPress={() => selectedProduct(item)}>
-            <CardBody className="overflow-visible p-0">
+        {(cartItemRedux.map((item:any, index:any) => (
+            <div key={index} className="gap-2 grid grid-cols-2 md:grid-cols-2">
+          <Card style={{margin:'1vw'}} shadow="none" key={index}>
+            <CardBody className="overflow-visible p-0 bg-blue">
+              <Card isPressable onPress={() => selectedProduct(item)}>
               <Image 
                 shadow="sm"
                 radius="lg"
-                // width="70%"
                 alt={item.title}
                 className="w-[70vw] md:w-[14vw] object-cover h-full"
                 src={item.img}
               />
+              </Card>
             </CardBody>
           </Card>
-           </Link>
            <div className="mt-5">
-           <h2 className="font-bold text-xl">{item.title}</h2>
-            <p className="uppercase font-bold text-default-600 text-xl my-2">{item.price}</p>
-            <Button isIconOnly color="primary" className="font-medium text-xl" variant="flat">+{item.qty}</Button>
-
-            {/* <p className=" font-bold text-default-600 text-xl">Quantity:-{item.qty}</p> */}
+            <div className="flex justify-between">
+            <div>
+           <h2 className="font-semibold text-xl">{item.title}</h2>
+           </div>
+           <div>
+              <Button
+              isIconOnly  
+              onPress={()=>{
+                dispatch(removeItem(item.key))
+                 dispatch(setVariable())
+                }} 
+              variant="flat"
+              color="danger" 
+               className="mr-4 bg-#fafafa hover:bg-danger-100 hover:text-destructive transition-colors p-1 rounded-full"
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-trash"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              </Button>
+              </div>
+              </div>
+              
+            <p className="uppercase font-bold text-xl">&#8377;{item.price*item.qty}</p>
+            
+            <div className="mt-2 md:mt-7">
+            <Button isIconOnly 
+            className="hover:text-destructive transition-colors p-1 rounded-full"
+            variant="flat" onPress={()=>incrementCount(item)}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              </Button>
+            <span className="text-center text-[1.7em] font-medium mx-4">{item.qty}</span>
+            <Button isIconOnly isDisabled={item.qty<=1?true:false}
+            className="hover:text-destructive transition-colors p-1 rounded-full"
+            variant="flat" onPress={()=>decrementCount(item)}>
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-minus"><path d="M5 12h14"/></svg>
+              </Button>
+              </div>
            </div>
            </div>
         )))}
       </div>
       <div className="justify-end block px-[2vw]">
-      <h2 className="font-bold text-xl">Total Price:  {totalPrice}</h2>
+      <h2 className="font-bold text-xl">Total Price:  {totalPriceRedux}</h2>
       <div className="mt-5 mb-5">
-      {/* <Button isDisabled={buy} color="warning" className="font-medium text-l" variant="solid" onPress={() => {handlePayment()}} >Buy Now</Button> */}
       </div>
         <FormComponent buyNow={handlePayment}/>
       </div>
-      </div>
-):(<ModalComponent orderid={modal} modal={setModal} />)}
+      </div>)
+      :
+      (<ModalComponent orderid={modal} modal={setModal} />)}
+      </div>)
+      :
+      (<EmptyCartComponent />)}
       </div>
     )
 }

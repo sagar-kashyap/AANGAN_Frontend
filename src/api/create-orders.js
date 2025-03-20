@@ -1,5 +1,5 @@
 import axios from "axios";
-  function handlePayment(){
+
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -48,6 +48,6 @@ const handlePayment = async () => {
   const paymentObject = new window.Razorpay(options);
   paymentObject.open();
 };
-}
+
 
 export default handlePayment;

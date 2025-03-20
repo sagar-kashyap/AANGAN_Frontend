@@ -3,9 +3,6 @@ import CoverImageComponent from "./CoverImage";
 import './layout.css';
 import CardComponent from "./Cards";
 
-import { useState,useEffect } from "react";
-
-
 function LayoutComponent(){
 
     

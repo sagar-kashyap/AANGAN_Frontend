@@ -1,6 +1,4 @@
-import { useState,useEffect } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
+
 import './App.css'
 import LayoutComponent from './components/Layout'
 import NavbarComponent from './components/Navbar';
@@ -8,6 +6,8 @@ import ProductComponent from './components/Product';
 import CartComponent from './components/Cart';
 import FooterComponent from "./components/Footer";
 import AboutUsComponent from './components/About';
+import ContactUsComponent from './components/Contact';
+// import PolicyPageComponent from './components/policy';
 import {
   BrowserRouter as Router,
   Routes,
@@ -31,9 +31,12 @@ function App() {
       <Route path="/cart" element= {<CartComponent />} />
       {/* </div> */}
       <Route path="/about" element= {<AboutUsComponent />} />
+      <Route path="/contact" element= {<ContactUsComponent />} />
+      {/* <Route path="/policy" element= {<PolicyPageComponent />} /> */}
       </Routes>
       </Router>
-      <div>
+      
+      <div className='footer' >
           <FooterComponent />
             </div>
     </div>

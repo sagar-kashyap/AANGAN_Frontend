@@ -1,4 +1,4 @@
-import {Card, CardBody, Image, Link} from "@nextui-org/react";
+import {Card, CardBody, Image, Link} from "@heroui/react";
 import ItemList from "../../public/Items"
 
 export default function CardComponent() {
@@ -6,7 +6,7 @@ export default function CardComponent() {
   
 function selectedProduct(item:any){
 console.log(item)
-localStorage.setItem("data",JSON.stringify(item))
+sessionStorage.setItem("data",JSON.stringify(item))
 }
   return (
     <div className="gap-2 grid grid-cols-1 sm:grid-cols-3">
@@ -15,6 +15,7 @@ localStorage.setItem("data",JSON.stringify(item))
         <Card style={{margin:'2vw'}} shadow="md" key={index} isPressable onPress={() => selectedProduct(item)}>
           <CardBody className="overflow-visible p-0">
             <Image
+              loading="lazy"
               shadow="sm"
               radius="lg"
               width="100%"
@@ -23,10 +24,6 @@ localStorage.setItem("data",JSON.stringify(item))
               src={item.img}
             />
           </CardBody>
-          {/* <CardFooter className="text-small justify-between">
-            <b>{item.title}</b>
-            <p className="text-default-500">{item.price}</p>
-          </CardFooter> */}
         </Card>
          </Link>
       ))}

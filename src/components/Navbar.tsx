@@ -1,5 +1,5 @@
 import {useState,useEffect} from "react";
-import {Badge, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button} from "@nextui-org/react";
+import {Badge, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button} from "@heroui/react";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from "../features/store";
 import { setNavbar } from "../features/variableSlice";
@@ -12,6 +12,7 @@ export default function NavbarComponent() {
  
  const variable = useSelector((state: RootState) => state.variable.value);
  const navItem = useSelector((state: RootState) => state.variable.Navbar);
+ console.log(navItem)
  const dispatch = useDispatch()
   useEffect(()=>{
     console.log(variable)
@@ -43,7 +44,9 @@ export default function NavbarComponent() {
         />
         <NavbarBrand>
           {/* <AcmeLogo /> */}
+          <Link onPress={()=>buttonActivate({title:"Home", href:"/"})} href="/" color="foreground">
           <p className="font-bold text-inherit">AANGAN</p>
+          </Link>
         </NavbarBrand>
       </NavbarContent>
 
@@ -60,7 +63,7 @@ export default function NavbarComponent() {
         <NavbarItem >
           {/* <Link href="/cart"> */}
           <Badge color="danger" content={variable}>
-          <Button isDisabled={item} as={Link} color="danger" href="/cart" variant="solid">
+          <Button onPress={()=>buttonActivate({title:"Cart", href:"/cart"})} isDisabled={item} as={Link} color="danger" href="/cart" variant="solid">
             <text style={{fontWeight:'bold'}}>🛒Cart</text>
           </Button>
           </Badge>

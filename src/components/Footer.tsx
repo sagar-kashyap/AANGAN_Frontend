@@ -14,16 +14,16 @@ const FooterComponent = () => {
         <div className="flex flex-col items-start">
           <h2 className="text-lg font-semibold text-gray-800">Contact Us</h2>
           <p className="mt-2 text-gray-600">Email: <a href="mailto:contact@example.com" className="text-blue-500 hover:underline">contact@example.com</a></p>
-        
+          
         </div>
 
         {/* Social Links */}
         <div className="flex flex-col items-start">
-          <h2 className="text-lg font-semibold text-gray-800">Follow Us</h2>
-          <div className="mt-2 flex space-x-4">
-            <a href="#" className="text-gray-600 hover:text-blue-500">Facebook</a>
-            <a href="#" className="text-gray-600 hover:text-blue-500">Twitter</a>
-            <a href="#" className="text-gray-600 hover:text-blue-500">LinkedIn</a>
+          <h2 className="text-lg font-semibold text-gray-800">Our Policies</h2>
+          <div className="mt-2 flex flex-col space-y-1">
+            <a href="https://merchant.razorpay.com/policy/PS0QYmLgV7EJnk/terms" className="text-sm text-gray-600 hover:text-blue-500">Terms & Conditions</a>
+            <a href="https://merchant.razorpay.com/policy/PS0QYmLgV7EJnk/refund" className="text-sm text-gray-600 hover:text-blue-500">Cancellation & Refund Policy</a>
+            <a href="https://merchant.razorpay.com/policy/PS0QYmLgV7EJnk/shipping" className="text-sm text-gray-600 hover:text-blue-500">Shipping & Delivery Policy</a>
           </div>
         </div>
       </div>

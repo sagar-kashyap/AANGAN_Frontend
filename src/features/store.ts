@@ -1,12 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import variableReducer from "./variableSlice";
 import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // Defaults to localStorage for web
+import sessionStorage from "redux-persist/es/storage/session";
 import { combineReducers } from "redux";
 
 const persistConfig = {
   key: "root",
-  storage, // Specify the storage type (localStorage or sessionStorage)
+  version: 1,
+  storage:sessionStorage, // Specify the storage type (localStorage or sessionStorage)
 };
 
 const rootReducer = combineReducers({

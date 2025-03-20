@@ -6,9 +6,9 @@ import {
     ModalFooter,
     Button,
     
-  } from "@nextui-org/react";
+  } from "@heroui/react";
   import { useNavigate } from "react-router-dom";
-  import {Snippet} from "@nextui-org/react";
+  import {Snippet} from "@heroui/react";
   
   export default function ModalComponent(props: any) {
 
