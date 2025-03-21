@@ -48,6 +48,4 @@ const handlePayment = async () => {
   const paymentObject = new window.Razorpay(options);
   paymentObject.open();
 };
-
-
 export default handlePayment;

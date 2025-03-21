@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react";
 import {Image, Button} from "@heroui/react";
 import './product.css'
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setVariable, addToCart, setNavbar } from "../features/variableSlice";
 import { useNavigate } from "react-router-dom";
 

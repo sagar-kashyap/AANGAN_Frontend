@@ -1,9 +1,9 @@
-import {Card, CardBody, Image, Link, Button} from "@heroui/react";
+import {Card, CardBody, Image, Button} from "@heroui/react";
 // import ItemList from "../../public/Items"
 import EmptyCartComponent from "./empty-cart";
 import axios from "axios";
 import FormComponent from "./Form";
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import ModalComponent from "./Modal";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "../features/store";

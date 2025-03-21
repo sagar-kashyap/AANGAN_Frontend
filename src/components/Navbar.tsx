@@ -1,7 +1,7 @@
 import {useState,useEffect} from "react";
 import {Badge, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button} from "@heroui/react";
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from "../features/store";
+import { RootState } from "../features/store";
 import { setNavbar } from "../features/variableSlice";
 
 export default function NavbarComponent() {
