@@ -1,10 +1,11 @@
-.coverImage,.cards{
-    
+.cards{
+  @media screen and (max-width: 768px) {
+    margin: 1rem;
+  }
+}
+  .cards{
+    /* margin: 1rem; */
     display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.cards{
-    margin-top: 10vh;
 }

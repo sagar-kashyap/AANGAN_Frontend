@@ -15,11 +15,11 @@ export default function ProductComponent() {
 
 const [buttonName,setButtonName]=useState("Add to cart")
 data=JSON.parse(sessionStorage.getItem("data")!)
-let cartData=JSON.parse(sessionStorage.getItem("cartItem")!)
+let cartData=JSON.parse(sessionStorage.getItem("cartItem")||"[]")
 
 useEffect(()=>{
   if(cartData){
-  console.log(cartData,data)
+  // console.log(cartData,data)
   currentItem=cartData.find((e:any)=> {
     return e.key==data.key;
   }); 
@@ -30,7 +30,7 @@ if(currentItem){
 },[]);
 
   function addItemToCart(addData: any){
-    console.log(addData)
+    // console.log(addData)
     currentItem=cartData.find((e:any)=> {
            return e.key==data.key;
     })
@@ -55,23 +55,30 @@ if(currentItem){
               src={data.img}
               width="100%"
             />
-          <div className="justify-items-center md:justify-items-start">
+          <div className="flex flex-col justify-items-center md:justify-items-start">
             
-        <h1 className="font-bold text-3xl">{data.title}</h1>
-       
-    <p className="mt-0 md:mt-8 uppercase font-bold text-default-600 text-3xl">&#8377;{data.price}</p>
-    
-    <div className="mt-10 grid grid-cols-1 md:grid-cols-2">
+        <h1 className="font-regular text-3xl my-6">{data.title}</h1>
+        <div className="h-[1px] bg-gray-100 w-full" />
+    <p className="my-2 md:my-4 uppercase font-semibold text-3xl">&#8377;{data.price}</p>
+    <p className="text-sm text-gray-500">
+                  ✓ Handcrafted with care
+                </p>
+    <div className="mt-8 md:mt-auto mb-10 grid grid-cols-1">
     <Button 
+    radius="full"
     size="lg" 
-    color="danger" 
-     className="text-xl" 
+      // color="primary" 
+     className="bg-gray-900 text-white text-xl" 
     variant="solid" 
     fullWidth={true}
     onPress={()=>addItemToCart(data)}>
      {buttonName}
       </Button>
-    </div>
+    
+    <p className="text-xs text-gray-500 text-center mt-4">
+                  Secure checkout powered by Razorpay
+                </p>
+                </div>
           </div>
     </div>
     </div>

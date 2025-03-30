@@ -1,5 +1,5 @@
 import {useState,useEffect} from "react";
-import {Badge, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button} from "@heroui/react";
+import {Badge, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link} from "@heroui/react";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "../features/store";
 import { setNavbar } from "../features/variableSlice";
@@ -12,10 +12,10 @@ export default function NavbarComponent() {
  
  const variable = useSelector((state: RootState) => state.variable.value);
  const navItem = useSelector((state: RootState) => state.variable.Navbar);
- console.log(navItem)
+//  console.log(navItem)
  const dispatch = useDispatch()
   useEffect(()=>{
-    console.log(variable)
+    // console.log(variable)
     if(variable===0){
       setItem(true)
     }
@@ -53,7 +53,13 @@ export default function NavbarComponent() {
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
           {menuItems.map((item,index)=>(
             <NavbarItem key={index} isActive={item.title===navItem.title?true:false}>
-            <Link onPress={()=>buttonActivate(item)}  href={item.href} color={item.title===navItem.title ? "primary" : "foreground"}>
+            <Link onPress={()=>buttonActivate(item)}  
+            href={item.href} 
+            color={item.title===navItem.title ? "primary" : "foreground"}
+            underline="hover"
+            size="md"
+            
+            >
             {item.title}
           </Link>
         </NavbarItem >
@@ -61,25 +67,32 @@ export default function NavbarComponent() {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem >
-          {/* <Link href="/cart"> */}
+          <Link color="foreground" href="/cart" onPress={()=>buttonActivate({title:"Cart", href:"/cart"})} isDisabled={item}>
           <Badge color="danger" content={variable}>
-          <Button onPress={()=>buttonActivate({title:"Cart", href:"/cart"})} isDisabled={item} as={Link} color="danger" href="/cart" variant="solid">
-            <text style={{fontWeight:'bold'}}>🛒Cart</text>
-          </Button>
+          {/* <Button onPress={()=>buttonActivate({title:"Cart", href:"/cart"})} isDisabled={item} as={Link}
+          className="font-bold" href="/cart" color="danger" size="md" variant="solid">
+           🛒Cart */}
+          
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+</svg>
+          {/* </Button> */}
           </Badge>
-          {/* </Link> */}
+          </Link>
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
             <Link
-              color={
-                index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
+            onPress={()=>buttonActivate(item)}
+              color={item.title===navItem.title?"primary":"foreground"
+                // index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
               }
               className="w-full"
               href={item.href}
               size="lg"
+              underline="hover"
             >
               {item.title}
             </Link>

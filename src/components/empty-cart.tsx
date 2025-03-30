@@ -1,8 +1,20 @@
 // import React from "react";
 import {Button } from "@heroui/react";
+import ModalComponent from "./Modal";
+import { useState,useEffect } from "react";
+interface EmptyCartProps {
+  orderid?: string | null; // Explicitly defining the type
+}
+const EmptyCartComponent: React.FC<EmptyCartProps> = ({ orderid }) => {
+  const [modal, setModal] = useState<string | null>(null);
 
-const EmptyCartComponent = () => {
+  useEffect(() => {
+    setModal(orderid || null);
+  }, [orderid]);
+   console.log(orderid)
   return (
+    <div>
+      {!modal?(
      <div className="flex flex-col items-center justify-center h-[65vh] text-center p-6">
       {/* <div> */}
        <div className="size-10 md:size-20 items-center">
@@ -14,7 +26,11 @@ const EmptyCartComponent = () => {
         Start Shopping
       </Button>
     {/* </div> */}
-     </div>
+      </div>
+    ):
+    (<ModalComponent orderid={modal} modal={setModal} />)
+    }
+    </div>
    
   );
 };

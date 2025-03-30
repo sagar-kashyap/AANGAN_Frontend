@@ -7,17 +7,17 @@ import {
     Button,
     
   } from "@heroui/react";
-  import { useNavigate } from "react-router-dom";
+ 
   import {Snippet} from "@heroui/react";
   
   export default function ModalComponent(props: any) {
 
-    const navigate = useNavigate();
-    // console.log(props.text)
-    function backHome(){
-      console.log("home")
-      navigate("/");
-    }
+    // const navigate = useNavigate();
+    // // console.log(props.text)
+    // function backHome(){
+    //   console.log("home")
+    //   navigate("/");
+    // }
 
     return (
       <>
@@ -36,8 +36,8 @@ import {
                   </p>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" onPress={()=>{props.modal(null);backHome()}} >
-                    Home
+                  <Button color="primary" onPress={()=>{props.modal(null)}} >
+                    Back
                   </Button>
                 </ModalFooter>
               </>

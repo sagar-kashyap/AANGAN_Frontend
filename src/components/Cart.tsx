@@ -4,11 +4,12 @@ import EmptyCartComponent from "./empty-cart";
 import axios from "axios";
 import FormComponent from "./Form";
 import { useState } from "react";
-import ModalComponent from "./Modal";
+
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "../features/store";
-import { setVariable,resetVariable,increaseQuantity, decreaseQuantity, removeItem } from "../features/variableSlice";
+import {resetCustomerDetails, setVariable,resetVariable,increaseQuantity, decreaseQuantity, removeItem, clearCart } from "../features/variableSlice";
  import { useNavigate } from "react-router-dom";
+
 interface address {
   fullName: string;
   phone: string;
@@ -28,16 +29,17 @@ type Item = {
 };
 function CartComponent(){
 
-  const [modal, setModal] = useState(null)
+ 
   const navigate = useNavigate();
-
-const CustAddress = useSelector((state: RootState) => state.variable.CustAddress);
+  const [orderId,setOrderId]=useState(null)
+ 
+  const CustAddress = useSelector((state: RootState) => state.variable.CustAddress);
 const cartItemRedux = useSelector((state: RootState) => state.variable.items);
 const dispatch = useDispatch();
-const totalPriceRedux = cartItemRedux.reduce((total, item) => total + item.price * item.qty, 0);
+const totalPriceRedux = cartItemRedux.reduce((total: number, item: { price: number; qty: number; }) => total + item.price * item.qty, 0);
     //removing img property from item as its not required to be stored in database
     let dbItemData = cartItemRedux.map(({ img, ...rest }:Item) => rest);
-  
+  console.log(dbItemData)
     function selectedProduct(_item: { key: number; title: string; img: string; price: string; }){
       navigate(`/product/${_item.title}`)
       sessionStorage.setItem("data",JSON.stringify(_item))
@@ -61,7 +63,8 @@ const totalPriceRedux = cartItemRedux.reduce((total, item) => total + item.price
       });
     };
 
-    async function custDetails(res: any,address: address){
+    async function custDetails(res: any,address:address){
+      // let address=JSON.stringify(sessionStorage.getItem("custData"))
       return await axios.post(`${import.meta.env.VITE_SERVER_API}/api/customer-data`, {
         custDetails: address,
         paymentDetails: res,
@@ -70,7 +73,8 @@ const totalPriceRedux = cartItemRedux.reduce((total, item) => total + item.price
     });
     }
 
-    async function sendMail(res: any,address: address){
+    async function sendMail(res: any,address:address){
+      
       return await axios.post(`${import.meta.env.VITE_SERVER_API}/order-details`, {
         custDetails: address,
         paymentDetails: res,
@@ -104,13 +108,17 @@ const totalPriceRedux = cartItemRedux.reduce((total, item) => total + item.price
           handler: function (response: any) {
               console.log("Payment Successful", response);
               
-              custDetails(response,CustAddress)
-              sendMail(response,CustAddress)
+             sendMail(response, CustAddress)
+             custDetails(response,CustAddress)
+            
               sessionStorage.removeItem("cartItem")
               sessionStorage.removeItem("data")
+              // setModal(response.razorpay_order_id)
+               setOrderId(response.razorpay_order_id)
+              console.log(orderId)
               dispatch(resetVariable());
-              setModal(response.razorpay_order_id)
-                 
+              dispatch(clearCart())
+              dispatch(resetCustomerDetails())
           },
           prefill: {
               name: CustAddress.fullName,
@@ -130,8 +138,7 @@ const totalPriceRedux = cartItemRedux.reduce((total, item) => total + item.price
 
         <div className="justify-center flex items-center mt-10 ml-5 md:ml-0">
         {cartItemRedux.length!=0?(
-          <div>
-        {modal===null?(
+          
         <div className="gap-2 grid grid-cols-1 md:grid-cols-2">
         <div className="gap-2 grid grid-cols-1">
         {(cartItemRedux.map((item:any, index:any) => (
@@ -143,7 +150,7 @@ const totalPriceRedux = cartItemRedux.reduce((total, item) => total + item.price
                 shadow="sm"
                 radius="lg"
                 alt={item.title}
-                className="w-[70vw] md:w-[14vw] object-cover h-full"
+                className="w-[70vw] md:w-[18vw] lg:w-[14vw] object-cover h-full"
                 src={item.img}
               />
               </Card>
@@ -152,7 +159,7 @@ const totalPriceRedux = cartItemRedux.reduce((total, item) => total + item.price
            <div className="mt-5">
             <div className="flex justify-between">
             <div>
-           <h2 className="font-semibold text-xl">{item.title}</h2>
+           <h2 className="font-regular text-xl">{item.title}</h2>
            </div>
            <div>
               <Button
@@ -170,16 +177,17 @@ const totalPriceRedux = cartItemRedux.reduce((total, item) => total + item.price
               </div>
               </div>
               
-            <p className="uppercase font-bold text-xl">&#8377;{item.price*item.qty}</p>
+            <p className="uppercase font-semibold text-xl">&#8377;{item.price*item.qty}</p>
             
             <div className="mt-2 md:mt-7">
-            <Button isIconOnly 
+            <Button isIconOnly size="sm"
             className="hover:text-destructive transition-colors p-1 rounded-full"
             variant="flat" onPress={()=>incrementCount(item)}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
               </Button>
             <span className="text-center text-[1.7em] font-medium mx-4">{item.qty}</span>
-            <Button isIconOnly isDisabled={item.qty<=1?true:false}
+            <Button isIconOnly size="sm"
+            isDisabled={item.qty<=1?true:false}
             className="hover:text-destructive transition-colors p-1 rounded-full"
             variant="flat" onPress={()=>decrementCount(item)}>
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-minus"><path d="M5 12h14"/></svg>
@@ -190,17 +198,15 @@ const totalPriceRedux = cartItemRedux.reduce((total, item) => total + item.price
         )))}
       </div>
       <div className="justify-end block px-[2vw]">
-      <h2 className="font-bold text-xl">Total Price:  {totalPriceRedux}</h2>
-      <div className="mt-5 mb-5">
+      <h2 className="font-bold text-xl my-2">Total Price:  &#8377;{totalPriceRedux}</h2>
+      {/* <div className="mt-5 mb-5">
+      </div> */}
+        <FormComponent buyNow={handlePayment} />
       </div>
-        <FormComponent buyNow={handlePayment}/>
       </div>
-      </div>)
+      )
       :
-      (<ModalComponent orderid={modal} modal={setModal} />)}
-      </div>)
-      :
-      (<EmptyCartComponent />)}
+      (<EmptyCartComponent orderid={orderId} />)}
       </div>
     )
 }

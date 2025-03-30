@@ -6,7 +6,7 @@ import { combineReducers } from "redux";
 
 const persistConfig = {
   key: "root",
-  version: 1,
+   version: 1,
   storage:sessionStorage, // Specify the storage type (localStorage or sessionStorage)
 };
 

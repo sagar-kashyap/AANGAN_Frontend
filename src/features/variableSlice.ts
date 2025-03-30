@@ -7,7 +7,16 @@ type CartItem = {
   qty: number;
   img: string;
 };
-
+type CustAddress={
+  fullName: string;
+  phone: string;
+  email:string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+}
 interface VariableState {
   value: number;
   items: CartItem[];
@@ -15,22 +24,14 @@ interface VariableState {
     title:string,
      href:string
     };
-  CustAddress:{
-    fullName: string;
-    phone: string;
-    email:string;
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-    country: string;
-  } // Change the type based on your needs (e.g., number, boolean, etc.)
+  CustAddress:CustAddress
 }
 
 const loadCart = (): CartItem[] => {
   const cartData = sessionStorage.getItem("cartItem");
   return cartData ? JSON.parse(cartData) : [];
 };
+
 const saveCart = (cart: CartItem[]) => {
   sessionStorage.setItem("cartItem", JSON.stringify(cart));
 };
@@ -51,7 +52,7 @@ const initialState: VariableState = {
     state: "",
     zip: "",
     country: ""
-  }
+  } 
 };
 
 
@@ -69,7 +70,11 @@ const variableSlice = createSlice({
       state.value = 0; // Reset the variable to its initial value
     },
     setGlobalAddress: (state,action:PayloadAction<VariableState["CustAddress"]>)=>{
-      state.CustAddress=action.payload;
+      console.log(action.payload)
+      state.CustAddress=action.payload
+    },
+    resetCustomerDetails: (state) => {
+      state.CustAddress=initialState.CustAddress
     },
     setNavbar:(state, action: PayloadAction<VariableState["Navbar"]>) => {
       state.Navbar = action.payload; // Update the value
@@ -105,8 +110,12 @@ const variableSlice = createSlice({
       state.items = state.items.filter((item) => item.key !== action.payload);
       saveCart(state.items);
     },
+    clearCart:(state)=>{
+      state.items=[]
+      saveCart(state.items);
+    }
   },
 });
 
-export const {addToCart, increaseQuantity,decreaseQuantity,removeItem, setVariable, resetVariable,setGlobalAddress,setNavbar } = variableSlice.actions;
+export const {clearCart, addToCart, increaseQuantity,decreaseQuantity,removeItem, setVariable, resetVariable,setGlobalAddress,setNavbar,resetCustomerDetails } = variableSlice.actions;
 export default variableSlice.reducer;
