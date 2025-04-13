@@ -1,37 +1,43 @@
-import {Card, CardBody, Image, Link, CardFooter} from "@heroui/react";
+import {Card, Image} from "@heroui/react";
 import ItemList from "../../public/Items"
+import { useNavigate } from "react-router-dom";
 
 export default function CardComponent() {
   const list = ItemList
-  
+  const navigate=useNavigate()
+
 function selectedProduct(item:any){
 console.log(item)
+navigate(`/product/${item.title}`)
 sessionStorage.setItem("data",JSON.stringify(item))
 }
   return (
-    <div className="gap-2 grid grid-cols-2 sm:grid-cols-3">
+    <div className="grid gap-2 md:gap-5 lg:gap-8 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {list.map((item, index) => (
-        <Link key={index} href={`/product/${item.title}`}>
-        <Card className="max-md:mb-[1em] sm:m-[2vw] md:m-[2vw] lg:m-[3vh]" shadow="md" key={index} isPressable onPress={() => selectedProduct(item)}>
-          <CardBody className="overflow-visible p-0">
-            <Image
+             <Card
+             key={index}
+             className="w-full max-w-xs h-full flex flex-col bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-lg hover:shadow-blue-50 transition duration-300"
+             isPressable
+             onPress={() => selectedProduct(item)}>
+             <Image
+             isZoomed
               loading="lazy"
-              shadow="sm"
-              radius="md"
+              // shadow="sm"
+              radius="none"
               width="100%"
               alt={item.title}
               className=" object-cover lg:h-[35vh] max-sm:w-[80vw] max-md:w-[50vw]"
               src={item.img}
             />
-          </CardBody>
-          <CardFooter className=" py-1 sm:py-2.5 text-small justify-between">
-            <p className="whitespace-nowrap overflow-hidden text-ellipsis font-medium md:font-semibold">{item.title}</p>
-            <p className="text-default-900">&#8377;{item.price}</p>
-           {/* <b>{item.title}</b>w-[80vw] md:w-[50vw] lg:w-[17vw]
-           <p className="text-default-500">{item.price}</p> */}
-          </CardFooter>
-        </Card>
-         </Link>
+      
+          <div className="flex flex-col justify-between p-2 md:p-4 text-left flex-grow">
+        <h3 className="font-semibold text-md md:text-lg text-foreground line-clamp-2">{item.title}</h3>
+        <p className="text-sm md:my-2 text-foreground/70 line-clamp-2">{item.description}</p>
+        <p className="text-lg md:text-xl font-bold text-foreground">₹{item.price}</p>
+      </div>
+          
+          </Card>
+        
       ))}
     </div>
   );

@@ -1,7 +1,7 @@
 const FooterComponent = () => {
   return (
     <footer className="bg-gray-100 text-gray-700 py-4 md:py-8 border-t">
-      <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
+      <div className="container mx-auto px-6 flex justify-between grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-8 text-center md:text-left">
         {/* Website Title */}
         <div className="flex flex-col items-center md:items-start">
           <h1 className="text-xl md:text-2xl font-bold text-gray-800">AANGAN</h1>
@@ -12,10 +12,10 @@ const FooterComponent = () => {
 
         {/* Contact Details */}
         <div className="flex flex-col items-center md:items-start">
-          <h2 className="text-lg font-semibold text-gray-800">Contact Us</h2>
+          {/* <h2 className="text-lg font-semibold text-gray-800">Contact Us</h2>
           <p className="mt-2 text-sm md:text-base text-gray-600">
             Email: <a href="mailto:contact@example.com" className="text-blue-500 hover:underline">contact@example.com</a>
-          </p>
+          </p> */}
         </div>
 
         {/* Policies */}

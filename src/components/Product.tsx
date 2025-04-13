@@ -46,24 +46,30 @@ if(currentItem){
 }
 
   return (
-    <div className="product md:h-[70vh] h-[80vh]">
-    <div className="h-auto grid grid-cols-1 gap-x-10 md:grid-cols-2">
+      <div className="w-[80vw] flex justify-center items-center px-4 py-8 md:py-16 mx-auto max-w-7xl">
+       <div className="flex flex-col md:flex-row md:space-x-8 lg:space-x-12">
     <Image
-              alt="Album cover"
+              alt="Product image"
               className="object-cover h-[40vh] md:h-[50vh]"
               shadow="md"
               src={data.img}
               width="100%"
             />
-          <div className="flex flex-col justify-items-center md:justify-items-start">
+          <div className="flex flex-col w-full max-w-xs overflow-hidden justify-items-center md:justify-items-start">
             
-        <h1 className="font-regular text-3xl my-6">{data.title}</h1>
+        <h1 className="break-words font-regular text-3xl my-6">{data.title}</h1>
         <div className="h-[1px] bg-gray-100 w-full" />
+        <p className="text-md text-gray-500 mt-2">
+                  {data.description}
+                </p>
     <p className="my-2 md:my-4 uppercase font-semibold text-3xl">&#8377;{data.price}</p>
-    <p className="text-sm text-gray-500">
+    <p className="text-sm text-gray-500 mb-2">
                   ✓ Handcrafted with care
                 </p>
-    <div className="mt-8 md:mt-auto mb-10 grid grid-cols-1">
+                <p className="text-sm text-gray-500">
+                ✓ Ethically sourced materials
+           </p>
+    <div className="mt-8 md:mt-auto grid grid-cols-1">
     <Button 
     radius="full"
     size="lg" 
@@ -82,5 +88,50 @@ if(currentItem){
           </div>
     </div>
     </div>
+    // <div className="w-full px-4 py-8 md:py-16 mx-auto max-w-7xl">
+    //   <div className="flex flex-col md:flex-row md:space-x-8 lg:space-x-12">
+    //     {/* Product Image */}
+    //     <div className=" flex justify-center max-w-sm items-center md:w-1/2 mb-6 md:mb-0">
+    //       <img
+    //         src={data.img}
+    //         alt={data.title}
+    //         className="object-cover h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px] object-cover rounded-lg shadow-md"
+    //       />
+    //     </div>
+
+    //     {/* Product Details */}
+    //     <div className="w-full md:w-1/2 flex flex-col">
+    //       <h1 className="text-2xl sm:text-3xl font-medium break-words mb-4">
+    //         {data.title}
+    //       </h1>
+          
+    //       <div className="h-[1px] bg-gray-200 w-full my-4" />
+          
+    //       <p className="text-2xl sm:text-3xl font-semibold my-4">
+    //         ₹{data.price}
+    //       </p>
+    //       <p className="text-sm text-gray-500 mb-2">
+    //         ✓ Handcrafted with care
+    //       </p>
+          
+    //       <p className="text-sm text-gray-500 mb-6">
+    //         ✓ Ethically sourced materials
+    //       </p>
+          
+    //       <div className="mt-auto">
+    //         <Button
+    //           className="w-full bg-gray-900 hover:bg-gray-800 text-white py-6 text-lg rounded-full"
+    //           onPress={()=>addItemToCart(data)}
+    //         >
+    //           {buttonName}
+    //         </Button>
+            
+    //         <p className="text-xs text-gray-500 text-center mt-4">
+    //           Secure checkout powered by Razorpay
+    //         </p>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
   );
 }

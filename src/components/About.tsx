@@ -2,7 +2,7 @@
 
 const AboutUsComponent = () => {
   return (
-    <div className="bg-gray-50 text-gray-800 py-12 px-6">
+    <div className="bg-gray-10 text-gray-800 py-12 px-6">
       <div className="container mx-auto max-w-4xl">
         <h1 className="text-4xl font-bold text-center mb-6">About Us</h1>
 
