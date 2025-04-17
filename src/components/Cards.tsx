@@ -26,7 +26,7 @@ sessionStorage.setItem("data",JSON.stringify(item))
               radius="none"
               width="100%"
               alt={item.title}
-              className=" object-cover lg:h-[35vh] max-sm:w-[80vw] max-md:w-[50vw]"
+              className=" object-cover lg:h-[20rem] max-sm:w-[80vw] max-md:w-[50vw]"
               src={item.img}
             />
       

@@ -46,6 +46,8 @@ if(currentItem){
 }
 
   return (
+    <>
+    <div></div>
       <div className="w-[80vw] flex justify-center items-center px-4 py-8 md:py-16 mx-auto max-w-7xl">
        <div className="flex flex-col md:flex-row md:space-x-8 lg:space-x-12">
     <Image
@@ -88,6 +90,7 @@ if(currentItem){
           </div>
     </div>
     </div>
+    </>
     // <div className="w-full px-4 py-8 md:py-16 mx-auto max-w-7xl">
     //   <div className="flex flex-col md:flex-row md:space-x-8 lg:space-x-12">
     //     {/* Product Image */}

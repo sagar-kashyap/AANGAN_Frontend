@@ -12,7 +12,7 @@ const ContactUsComponent = () => {
 
   const handleSubmit = (e:any) => {
     e.preventDefault();
-    axios.post("http://localhost:5000/customer-query",form)
+    axios.post(`${import.meta.env.VITE_SERVER_API}/customer-query`,form)
     .then(res=>{
       console.log(res.data)
     })
@@ -25,7 +25,7 @@ const ContactUsComponent = () => {
         <CardBody>
           <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">Contact Us</h1>
           <p className="text-gray-600 mb-6 text-center">
-            Have questions or need assistance? Reach out to us at <a href="mailto:contact@example.com" className="text-blue-600 font-bold hover:underline">Email</a>.
+            Have questions or need assistance? Reach out to us at <a href="mailto:aangan.shop0@gmail.com" className="text-blue-600 font-bold hover:underline">Email</a>.
           </p>
           
           {/* <p className="mt-2 text-gray-600 text-center">Email: <a href="mailto:contact@example.com" className="text-blue-500 hover:underline">contact@example.com</a></p> */}

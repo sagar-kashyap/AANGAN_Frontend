@@ -99,7 +99,7 @@ const totalPriceRedux = cartItemRedux.reduce((total: number, item: { price: numb
       });
    
       const options = {
-          key: import.meta.env.REACT_APP_RAZORPAY_KEY_ID, // Your publishable key from Razorpay Dashboard
+          key: import.meta.env.VITE_REACT_APP_RAZORPAY_KEY_ID, // Your publishable key from Razorpay Dashboard
           amount: order.amount,
           currency: order.currency,
           name: "AANGAN",
@@ -147,7 +147,7 @@ const totalPriceRedux = cartItemRedux.reduce((total: number, item: { price: numb
             <CardBody className="overflow-visible p-0 bg-blue">
               <Card isPressable onPress={() => selectedProduct(item)}>
               <Image 
-                shadow="sm"
+                shadow="none"
                 radius="lg"
                 alt={item.title}
                 className="w-[70vw] md:w-[18vw] lg:w-[14vw] object-cover h-full"
@@ -159,7 +159,7 @@ const totalPriceRedux = cartItemRedux.reduce((total: number, item: { price: numb
            <div className="mt-5">
             <div className="flex justify-between">
             <div>
-           <h2 className="font-regular text-xl">{item.title}</h2>
+           <h2 className="break-words font-regular text-lg md:text-xl">{item.title}</h2>
            </div>
            <div>
               <Button
@@ -177,7 +177,7 @@ const totalPriceRedux = cartItemRedux.reduce((total: number, item: { price: numb
               </div>
               </div>
               
-            <p className="uppercase font-semibold text-xl">&#8377;{item.price*item.qty}</p>
+            <p className="uppercase font-semibold text-lg md:text-xl">&#8377;{item.price*item.qty}</p>
             
             <div className="mt-2 md:mt-7">
             <Button isIconOnly size="sm"

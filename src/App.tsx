@@ -7,6 +7,7 @@ import CartComponent from './components/Cart';
 import FooterComponent from "./components/Footer";
 import AboutUsComponent from './components/About';
 import ContactUsComponent from './components/Contact';
+import ScrollToTop from './components/ScrollToTop';
 // import PolicyPageComponent from './components/policy';
 import {
   BrowserRouter as Router,
@@ -20,6 +21,7 @@ function App() {
   return (
     <div>
       <Router>
+        <ScrollToTop />
       <NavbarComponent />
       <Routes>
       <Route path="/" element= {<LayoutComponent />} />
