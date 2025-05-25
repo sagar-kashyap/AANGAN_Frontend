@@ -37,7 +37,7 @@ const AddressSection: React.FC<ChildProps> = ({buyNow}) =>{
 
     const isFormValid = Object.values(address).every((val) => val.trim() !== "");
     useEffect(() => {
-        console.log("Updated address:", address);
+        // console.log("Updated address:", address);
         dispatch(setGlobalAddress(address)); // Dispatch updated state to Redux
     }, [address, dispatch]);
     const handleChange = (e:any) => {

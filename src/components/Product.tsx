@@ -52,7 +52,7 @@ if(currentItem){
        <div className="flex flex-col md:flex-row md:space-x-8 lg:space-x-12">
     <Image
               alt="Product image"
-              className="object-cover h-[40vh] md:h-[50vh]"
+              className="object-cover h-[40vh] md:h-[53vh]"
               shadow="md"
               src={data.img}
               width="100%"

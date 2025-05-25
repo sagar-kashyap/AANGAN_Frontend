@@ -80,12 +80,14 @@ const variableSlice = createSlice({
       state.Navbar = action.payload; // Update the value
     },
     addToCart: (state, action: PayloadAction<CartItem>) => {
-      const existingItem = state.items.find((item) => item.key === action.payload.key);
-      if (existingItem) {
-        existingItem.qty += 1;
-      } else {
+      // const existingItem = state.items.find((item) => item.key === action.payload.key);
+      // console.log(existingItem)
+      // if (existingItem) {
+      //   console.log(existingItem)
+      //   existingItem.qty += 1;
+      // } else {
         state.items.push(action.payload);
-      }
+      // }
       saveCart(state.items);
     },
     increaseQuantity: (state, action: PayloadAction<number>) => {

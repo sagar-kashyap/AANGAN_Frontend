@@ -135,22 +135,23 @@ const totalPriceRedux = cartItemRedux.reduce((total: number, item: { price: numb
     };
   
     return(
-
-        <div className="justify-center flex items-center mt-10 ml-5 md:ml-0">
+<>
+<div className=" md:w-[80vw] flex justify-center items-center px-0 md:px-4 md:py-2 mx-auto">
+        <div className=" mx-auto mt-10 ml-5 md:ml-0">
         {cartItemRedux.length!=0?(
           
         <div className="gap-2 grid grid-cols-1 md:grid-cols-2">
-        <div className="gap-2 grid grid-cols-1">
+        <div>
         {(cartItemRedux.map((item:any, index:any) => (
             <div key={index} className="gap-2 grid grid-cols-2 md:grid-cols-2">
           <Card style={{margin:'1vw'}} shadow="none" key={index}>
-            <CardBody className="overflow-visible p-0 bg-blue">
+            <CardBody className="overflow-visible p-0">
               <Card isPressable onPress={() => selectedProduct(item)}>
               <Image 
                 shadow="none"
                 radius="lg"
                 alt={item.title}
-                className="w-[70vw] md:w-[18vw] lg:w-[14vw] object-cover h-full"
+                className="w-[70vw] md:w-[18vw] lg:w-[15rem] object-cover h-full"
                 src={item.img}
               />
               </Card>
@@ -208,6 +209,8 @@ const totalPriceRedux = cartItemRedux.reduce((total: number, item: { price: numb
       :
       (<EmptyCartComponent orderid={orderId} />)}
       </div>
+      </div>
+    </>
     )
 }
 
